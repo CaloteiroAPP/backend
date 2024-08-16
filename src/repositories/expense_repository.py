@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pymongo.collection import Collection
 
-from src.models.expense import Expense, State
+from src.models.expense_model import Expense, State
 
 
 class ExpenseRepository:

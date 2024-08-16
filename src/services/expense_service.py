@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 
 from repositories.expense_repository import ExpenseRepository
-from src.models.expense import Expense, State
+from src.models.expense_model import Expense, State
 
 
 class ExpenseService:
