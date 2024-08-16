@@ -5,10 +5,12 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from src.models.currency_model import Currency
+
 
 class State(Enum):
-    WAITING = "waiting"
-    SETTLED = "settled"
+    WAITING_PAYMENTS = "waiting_payments"
+    SETTLED_UP = "settled_up"
     # TODO: Check if there are more states 
 
 class ExpenseType(Enum):
@@ -22,11 +24,17 @@ class ExpenseType(Enum):
 class Change:
     str: str
     timestamp: int
-
+    
+class Spliting:
+    user: UUID
+    amount: float
+    reaction: Optional[str] = None
+    
 class Expense(BaseModel):
     _id: UUID
     payer: UUID
     amount: float
+    currency: Currency
     state: State
     description: str
     type: ExpenseType
@@ -35,7 +43,7 @@ class Expense(BaseModel):
     changes: List[Change] = []
     
     session: Optional[str] = None
-    users: List[UUID] = []
+    spliting: List[Spliting]
 
     class Config:
         orm_mode = True
