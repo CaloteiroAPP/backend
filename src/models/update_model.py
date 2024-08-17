@@ -7,10 +7,10 @@ from pydantic import BaseModel
 
 
 class UpdateType(Enum):
-    EXPENSIVE_PAYED = "expensive_payed" # TODO: Implement this type
-    EXPENSIVE_REJECTED = "expensive_rejected" # TODO: Implement this type
-    EXPENSIVE_ADDED = "expensive_added" # TODO: Implement this type
-    EXPENSIVE_REMOVED = "expensive_removed" # TODO: Implement this type
+    EXPENSE_PAYED = "expense_payed" # TODO: Implement this type
+    EXPENSE_ADDED = "expense_added" # TODO: Implement this type
+    EXPENSE_REMOVED = "expense_removed" # TODO: Implement this type
+    EXPENSE_ERROR_DETECTED = "expense_error_detected" # TODO: Implement this type
     
     USER_JOINED_SESSION = "user_joined_session" # TODO: Implement this type
     NEW_SESSION_LINK = "new_session_link" # TODO: Implement this type

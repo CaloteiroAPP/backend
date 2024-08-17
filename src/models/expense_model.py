@@ -5,9 +5,6 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.models.currency_model import Currency
-
-
 class State(Enum):
     WAITING_PAYMENTS = "waiting_payments"
     SETTLED_UP = "settled_up"
@@ -30,11 +27,14 @@ class Spliting:
     amount: float
     reaction: Optional[str] = None
     
+# class Currency:
+#     code: str
+    
 class Expense(BaseModel):
     _id: UUID
     payer: UUID
     amount: float
-    currency: Currency
+    currency: str
     state: State
     description: str
     type: ExpenseType
