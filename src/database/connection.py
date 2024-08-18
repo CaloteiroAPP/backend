@@ -5,7 +5,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 # Load environment variables from .env file
-load_dotenv("../.env")
+load_dotenv(".env")
 
 # Retrieve the MongoDB Atlas components from environment variables
 MONGO_USER = os.getenv("MONGO_USER")

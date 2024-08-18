@@ -13,7 +13,7 @@ fi
 
 # Activate the virtual environment
 echo "Activating virtual environment..."
-source "$VENV_DIR/bin/activate"
+source $VENV_DIR/bin/activate
 
 # Install the requirements from requirements.txt
 if [ -f "requirements.txt" ]; then

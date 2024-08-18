@@ -31,9 +31,6 @@ class Session(BaseModel):
     expenses: List[UUID] = []
     users: List[UUID] = []
     session_activity: List[UUID] = []
-
-    class Config:
-        orm_mode = True
         
         
         

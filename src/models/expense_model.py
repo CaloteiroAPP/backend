@@ -1,14 +1,20 @@
-
 from enum import Enum
+import time
 from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
 
+
 class State(Enum):
     WAITING_PAYMENTS = "waiting_payments"
     SETTLED_UP = "settled_up"
-    # TODO: Check if there are more states 
+
+class SplitingState(Enum):
+    WAITING = "waiting"
+    DONE = "done"
+    PAID = "paid"
+    REJECTED = "rejected"
 
 class ExpenseType(Enum):
     GENERAL = "general"
@@ -16,20 +22,17 @@ class ExpenseType(Enum):
     TRANSPORT = "transport"
     ENTERTAINMENT = "entertainment"
     SHOPPING = "shopping"
-    # TODO: Add more expense types
-    
-class Change:
+
+class Change(BaseModel):
     str: str
-    timestamp: int
-    
-class Spliting:
+    timestamp: float = time.time()
+
+class Spliting(BaseModel):
     user: UUID
     amount: float
     reaction: Optional[str] = None
-    
-# class Currency:
-#     code: str
-    
+    state: SplitingState
+
 class Expense(BaseModel):
     _id: UUID
     payer: UUID
@@ -38,15 +41,9 @@ class Expense(BaseModel):
     state: State
     description: str
     type: ExpenseType
-    timestamp: int
+    timestamp: float = time.time()
     
     changes: List[Change] = []
     
     session: Optional[str] = None
     spliting: List[Spliting]
-
-    class Config:
-        orm_mode = True
-        
-
-    

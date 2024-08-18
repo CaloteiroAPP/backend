@@ -25,7 +25,5 @@ class Update(BaseModel):
     action: str
     type: UpdateType
     data: dict
-    timestamp: int = time.time()
+    timestamp: float = time.time()
 
-    class Config:
-        orm_mode = True

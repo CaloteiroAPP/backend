@@ -19,7 +19,7 @@ class CurrencyExchanger:
         
         def update_currency_rates():
             try:
-                load_dotenv("../.env")
+                load_dotenv(".env")
                 api_url = os.getenv("EXCHANGE_API_URL")
                 
                 response = requests.get(api_url)

@@ -14,11 +14,14 @@ class NotificationSettings:
 class UserSettings:
     verified: bool
     app_access_code: int
-    friends: list[UUID] = []
     blocked_users: list[UUID] = []
     muted_users: list[UUID] = []
     
     notification_settings: NotificationSettings
+    
+class Friend:
+    user: UUID
+    favorite: bool
 
 class User(BaseModel):
     _id: UUID
@@ -27,12 +30,12 @@ class User(BaseModel):
     phone: int
     first_name: str
     last_name: str
-    photo_source: str
+    photo: str
+    
+    friends: List[Friend] = []
     
     sessions: List[UUID] = []
     personal_activity: List[UUID] = []
     
     user_settings: UserSettings
 
-    class Config:
-        orm_mode = True
