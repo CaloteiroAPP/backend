@@ -6,7 +6,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class UpdateType(Enum):
+class NotificationType(Enum):
     EXPENSE_PAYED = "expense_payed" # TODO: Implement this type
     EXPENSE_ADDED = "expense_added" # TODO: Implement this type
     EXPENSE_REMOVED = "expense_removed" # TODO: Implement this type
@@ -20,10 +20,10 @@ class UpdateType(Enum):
     FRIEND_REQUEST_ACCEPTED = "friend_request_accepted" # TODO: Implement this type
     FRIEND_REQUEST_REJECTED = "friend_request_rejected" # TODO: Implement this type
 
-class Update(BaseModel):
+class Notification(BaseModel):
     _id: UUID
     action: str
-    type: UpdateType
+    type: NotificationType
     data: dict
     timestamp: float = time.time()
 

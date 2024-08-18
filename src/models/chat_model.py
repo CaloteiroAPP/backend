@@ -1,13 +1,8 @@
-
-import time
-from uuid import UUID
 from pydantic import BaseModel
 
-class Message:
-    text: str
-    user: str
-    timestamp: float = time.time()
+from src.models.message_model import Message
+
 
 class Chat(BaseModel):
-    _id: UUID
     messages: list[Message] = []
+    blocked: bool = False

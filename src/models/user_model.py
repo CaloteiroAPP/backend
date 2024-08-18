@@ -5,13 +5,13 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class NotificationSettings:
+class NotificationSettings(BaseModel):
     email_notifications: bool = True
     push_notifications: bool = True
     sms_notifications: bool = True
     # TODO: Add more notification settings
 
-class UserSettings:
+class UserSettings(BaseModel):
     verified: bool
     app_access_code: int
     blocked_users: list[UUID] = []
@@ -19,7 +19,7 @@ class UserSettings:
     
     notification_settings: NotificationSettings
     
-class Friend:
+class Friend(BaseModel):
     user: UUID
     favorite: bool
 
