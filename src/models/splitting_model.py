@@ -1,16 +1,10 @@
-from enum import Enum
-from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 
-class SplitingState(Enum):
-    WAITING = "waiting"
-    DONE = "done"
-    PAID = "paid"
-    REJECTED = "rejected"
+from src.models.splitting_settings_model import SplitingSettings
+
     
 class Spliting(BaseModel):
-    user: UUID
     amount: float
-    reaction: Optional[str] = None
-    state: SplitingState
+    settings: SplitingSettings = SplitingSettings()
+    user: UUID

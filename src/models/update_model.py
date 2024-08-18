@@ -24,6 +24,6 @@ class Notification(BaseModel):
     _id: UUID
     action: str
     type: NotificationType
-    data: dict
+    data: dict = {}
     timestamp: float = time.time()
 
