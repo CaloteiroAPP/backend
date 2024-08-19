@@ -1,20 +1,19 @@
 
-
-import time
 from typing import List
 from uuid import UUID
 from pydantic import BaseModel
 
-from src.models.expense_model import ExpenseType, Spliting
+from src.models.expense_model import Splitting
+from src.models.expense_settings_model import ExpenseType
 
 
-class CreateExpense(BaseModel):
+class CreateExpenseDTO(BaseModel):
     payer: UUID
     amount: float
     currency: str
     description: str
     type: ExpenseType
-    spliting: List[Spliting]
+    splitting: List[Splitting]
     
     class Config:
         orm_mode = True

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 
 from pymongo.collection import Collection
@@ -12,7 +12,8 @@ class ExpenseRepository(RepositoryInterface):
         super().__init__(collection)
 
     async def create_expense(self, expense: Expense) -> Expense:
-        expense = await super().create(expense)
+        created_base_model = await super().create(expense)
+        expense = Expense(**created_base_model.model_dump())
         return expense
 
     async def get_expense_by_id(self, expense_id: UUID) -> Optional[Expense]:

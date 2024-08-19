@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo.collection import Collection
 
@@ -22,7 +22,7 @@ app = FastAPI(
 )
 
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
@@ -38,6 +38,7 @@ expense_service = ExpenseService(expense_repository)
 
 # Add routers to the application
 app.include_router(expense_router, prefix="/api")
+
 
 @app.on_event("startup")
 async def startup_event():

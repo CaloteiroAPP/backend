@@ -1,16 +1,16 @@
-
 from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
 
 
-class SplitingState(Enum):
+class SplittingState(Enum):
     WAITING = "waiting"
     DONE = "done"
     PAID = "paid"
     REJECTED = "rejected"
 
-class SplitingSettings(BaseModel):
+
+class SplittingSettings(BaseModel):
     reaction: Optional[str] = None
-    state: SplitingState = SplitingState.WAITING
+    state: SplittingState = SplittingState.WAITING

@@ -31,6 +31,7 @@ except Exception as e:
 # Access the specified database and collection
 db = client[DATABASE_NAME]
 
+
 # Function to ensure the connection and availability of the database and collection
 def ensure_db_and_collection():
     if client is not None:

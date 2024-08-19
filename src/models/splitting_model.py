@@ -1,10 +1,10 @@
 from uuid import UUID
 from pydantic import BaseModel
 
-from src.models.splitting_settings_model import SplitingSettings
+from src.models.splitting_settings_model import SplittingSettings
 
-    
-class Spliting(BaseModel):
+
+class Splitting(BaseModel):
     amount: float
-    settings: SplitingSettings = SplitingSettings()
+    settings: SplittingSettings = SplittingSettings()
     user: UUID

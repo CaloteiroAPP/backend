@@ -1,8 +1,8 @@
-
 from enum import Enum
 from typing import Optional
 from uuid import UUID, uuid4
 from pydantic import BaseModel
+
 
 class SessionType(Enum):
     GENERAL = "general"
@@ -12,6 +12,7 @@ class SessionType(Enum):
     HOME = "home"
     COUPLE = "couple"
     WORK = "work"
+
 
 class SessionSettings(BaseModel):
     chat: Optional[UUID] = None
