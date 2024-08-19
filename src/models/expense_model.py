@@ -1,7 +1,7 @@
 import time
 from enum import Enum
 from typing import List, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
@@ -21,7 +21,7 @@ class SplittingMethod(Enum):
 
 
 class Expense(BaseModel):
-    _id: UUID
+    _id: UUID = uuid4()
     amount: float
     currency: str
     method: SplittingMethod = SplittingMethod.EQUAL_SPLITTING
@@ -30,3 +30,9 @@ class Expense(BaseModel):
     splitting: List[Splitting]
     state: State = State.WAITING_PAYMENTS
     timestamp: float = time.time()
+    
+    # TODO: Remove this method
+    def model_dump(self, **kwargs): 
+        data = super().model_dump(**kwargs)
+        data["_id"] = self._id
+        return data

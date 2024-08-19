@@ -4,7 +4,6 @@ from uuid import UUID
 from pydantic import BaseModel
 
 from src.models.expense_model import Splitting
-from src.models.expense_settings_model import ExpenseType
 
 
 class CreateExpenseDTO(BaseModel):
@@ -12,8 +11,6 @@ class CreateExpenseDTO(BaseModel):
     amount: float
     currency: str
     description: str
-    type: ExpenseType
+    type: str
     splitting: List[Splitting]
     
-    class Config:
-        orm_mode = True

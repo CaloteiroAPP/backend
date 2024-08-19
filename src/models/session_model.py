@@ -9,7 +9,7 @@ from src.models.session_settings_model import SessionSettings
 
 
 class Session(BaseModel):
-    _id: UUID
+    _id: UUID = uuid4()
     activity: List[Change] = []
     creator: UUID
     expenses: List[UUID] = []

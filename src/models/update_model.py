@@ -1,6 +1,6 @@
 import time
 from enum import Enum
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
@@ -21,7 +21,7 @@ class NotificationType(Enum):
 
 
 class Notification(BaseModel):
-    _id: UUID
+    _id: UUID = uuid4()
     action: str
     data: dict = {}
     timestamp: float = time.time()
