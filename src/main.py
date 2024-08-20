@@ -31,10 +31,15 @@ app.add_middleware(
 
 # Initialize the collections
 expense_collection: Collection = db["expense"]
+session_collection: Collection = db["session"]
+user_collection: Collection = db["user"]
+change_collection: Collection = db["change"]
 
 # Create an instance of the expense repository and service
 expense_repository = ExpenseRepository(expense_collection)
 expense_service = ExpenseService(expense_repository)
+
+
 
 # Add routers to the application
 app.include_router(expense_router, prefix="/api")

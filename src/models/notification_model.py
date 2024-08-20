@@ -23,6 +23,8 @@ class NotificationType(Enum):
 class Notification(BaseModel):
     _id: UUID = uuid4()
     action: str
+    session: UUID = None  # Related to a session
+    user: UUID = None  # Related to a user and/or restricted to a session's user
     data: dict = {}
     timestamp: float = time.time()
     type: NotificationType

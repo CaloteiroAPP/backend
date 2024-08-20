@@ -14,14 +14,9 @@ async def create_expense(expense: CreateExpenseDTO,
     print("Valid expense")
     
     # Example mock response that matches the `Expense` model
-    expense = Expense(
-        payer=expense.payer,
-        amount=expense.amount,
-        currency=expense.currency,
-        description=expense.description,
-        type=expense.type,
-        splitting=expense.splitting
-    )
-    print(expense.model_dump())
+    expense = service.create_expense(expense)
+    if expense is None:
+        return None
+    
     return expense
     # return await service.create_expense(expense)
