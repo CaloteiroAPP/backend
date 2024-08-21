@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 from pydantic import BaseModel
 
@@ -15,7 +14,7 @@ class SessionType(Enum):
 
 
 class SessionSettings(BaseModel):
-    chat: Optional[UUID] = None
-    photo: str
+    chat: UUID = None
+    photo: str = None
     temporary_access: UUID = uuid4()
     type: SessionType = SessionType.GENERAL

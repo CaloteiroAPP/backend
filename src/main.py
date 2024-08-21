@@ -39,8 +39,6 @@ change_collection: Collection = db["change"]
 expense_repository = ExpenseRepository(expense_collection)
 expense_service = ExpenseService(expense_repository)
 
-
-
 # Add routers to the application
 app.include_router(expense_router, prefix="/api")
 

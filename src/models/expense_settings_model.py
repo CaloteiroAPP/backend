@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 from src.models.change_model import Change
@@ -14,9 +14,17 @@ class ExpenseType(Enum):
     TRANSPORT = "transport"
 
 
+class SplittingMethod(Enum):
+    CUSTOM_SPLITTING = "custom_splitting"
+    EQUAL_SPLITTING = "equal_splitting"
+    I_PAY_ALL = "i_pay_all"
+    YOU_PAY_ALL = "you_pay_all"
+
+
 class ExpenseSettings(BaseModel):
     activity: List[Change] = []
     description: str = ""
-    photo: Optional[str] = None
-    type: ExpenseType = ExpenseType.GENERAL
-    chat: Optional[Chat] = None
+    method: str = SplittingMethod.EQUAL_SPLITTING
+    photo: str | None = None
+    type: str = ExpenseType.GENERAL
+    chat: Chat | None = None

@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -12,5 +11,5 @@ class SplittingState(Enum):
 
 
 class SplittingSettings(BaseModel):
-    reaction: Optional[str] = None
+    reaction: str | None = None
     state: SplittingState = SplittingState.WAITING

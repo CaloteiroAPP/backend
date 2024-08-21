@@ -10,7 +10,7 @@ from src.models.notification_settings_model import NotificationSettings
 class UserSettings(BaseModel):
     app_access_code: Optional[int] = None
     blocked_users: list[UUID] = []
-    friends: List[Friend] = []
+    friend_users: List[Friend] = []
     friend_requests: List[UUID] = []
     muted_users: list[UUID] = []
     notification_settings: NotificationSettings = NotificationSettings()
