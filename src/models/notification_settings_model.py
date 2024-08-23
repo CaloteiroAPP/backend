@@ -9,3 +9,6 @@ class NotificationSettings(BaseModel):
     # sms_notifications: bool = True
     
     # TODO: Add more notification settings
+    
+    class Config:
+        arbitrary_types_allowed = True

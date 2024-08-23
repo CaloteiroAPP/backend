@@ -1,21 +1,34 @@
+import random
+import string
 import time
 from typing import List
-from uuid import UUID, uuid4
 
-from pydantic import BaseModel
+from bson import ObjectId
+from pydantic import BaseModel, Field
 
 from src.models.change_model import Change
 from src.models.session_settings_model import SessionSettings
 
 
+def generate_session_password(length=6):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
+
 class Session(BaseModel):
-    _id: UUID = uuid4()
+    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
     activity: List[Change] = []
-    creator: UUID
-    expenses: List[UUID] = []
-    members: List[UUID] = []
+    creator: ObjectId
+    expenses: List[ObjectId] = []
+    members: List[ObjectId] = []
     name: str
-    password: UUID = uuid4()
-    public_code: UUID = uuid4()
-    settings: SessionSettings = SessionSettings()
+    password: str = generate_session_password()
+    session_settings: SessionSettings = SessionSettings()
     timestamp: float = time.time()
+    
+    class Config:
+        arbitrary_types_allowed = True
+    
+    def model_dump_id(self, *args, **kwargs): 
+        session_dict = super().model_dump(*args, **kwargs)
+        session_dict['id'] = self.id
+        return session_dict

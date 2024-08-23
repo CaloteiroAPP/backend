@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pymongo.collection import Collection
 
-from src.database.connection import db, ensure_db_and_collection
-from src.repositories.expense_repository import ExpenseRepository
+from src.database.connection import ensure_db_and_collection
 from src.routers.expense_router import router as expense_router
-from src.services.expense_service import ExpenseService
+from src.routers.session_router import router as session_router
+from src.routers.user_router import router as user_router
 
 tags_metadata = []
 description = """ """
@@ -29,18 +28,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the collections
-expense_collection: Collection = db["expense"]
-session_collection: Collection = db["session"]
-user_collection: Collection = db["user"]
-change_collection: Collection = db["change"]
-
-# Create an instance of the expense repository and service
-expense_repository = ExpenseRepository(expense_collection)
-expense_service = ExpenseService(expense_repository)
-
 # Add routers to the application
 app.include_router(expense_router, prefix="/api")
+app.include_router(user_router, prefix="/api")
+app.include_router(session_router, prefix="/api")
 
 
 @app.on_event("startup")

@@ -1,20 +1,25 @@
 from enum import Enum
-from uuid import UUID, uuid4
 from pydantic import BaseModel
+
+from src.models.chat_model import Chat
 
 
 class SessionType(Enum):
-    GENERAL = "general"
-    TRIP = "trip"
+    COUPLE = "couple"
     ENTERTAINMENT = "entertainment"
+    GENERAL = "general"
     GROUP = "group"
     HOME = "home"
-    COUPLE = "couple"
+    TRIP = "trip"
     WORK = "work"
 
 
 class SessionSettings(BaseModel):
-    chat: UUID = None
+    chat: Chat = Chat()
     photo: str = None
-    temporary_access: UUID = uuid4()
-    type: SessionType = SessionType.GENERAL
+    # temporary_access:  #TODO: Implement this
+    # public_code:  #TODO: Implement this
+    type: str = SessionType.GENERAL
+    
+    class Config:
+        arbitrary_types_allowed = True

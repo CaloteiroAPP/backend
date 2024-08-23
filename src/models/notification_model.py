@@ -1,8 +1,8 @@
 import time
 from enum import Enum
-from uuid import UUID, uuid4
 
-from pydantic import BaseModel
+from bson import ObjectId
+from pydantic import BaseModel, Field
 
 
 class NotificationType(Enum):
@@ -21,10 +21,18 @@ class NotificationType(Enum):
 
 
 class Notification(BaseModel):
-    _id: UUID = uuid4()
+    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
     action: str
-    session: UUID = None  # Related to a session
-    user: UUID = None  # Related to a user and/or restricted to a session's user
+    session: ObjectId = None  # Related to a session
+    user: ObjectId = None  # Related to a user and/or restricted to a session's user
     data: dict = {}
     timestamp: float = time.time()
     type: NotificationType
+    
+    class Config:
+        arbitrary_types_allowed = True
+    
+    def model_dump_id(self, *args, **kwargs): 
+        session_dict = super().model_dump(*args, **kwargs)
+        session_dict['id'] = self.id
+        return session_dict

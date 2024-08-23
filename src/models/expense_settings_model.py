@@ -28,3 +28,6 @@ class ExpenseSettings(BaseModel):
     photo: str | None = None
     type: str = ExpenseType.GENERAL
     chat: Chat | None = None
+    
+    class Config:
+        arbitrary_types_allowed = True

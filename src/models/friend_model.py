@@ -1,8 +1,11 @@
 
-from uuid import UUID
+from bson import ObjectId
 from pydantic import BaseModel
 
 
 class Friend(BaseModel):
     favorite: bool = False
-    user: UUID
+    user: ObjectId
+    
+    class Config:
+        arbitrary_types_allowed = True

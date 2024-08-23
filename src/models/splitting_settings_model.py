@@ -13,3 +13,6 @@ class SplittingState(Enum):
 class SplittingSettings(BaseModel):
     reaction: str | None = None
     state: SplittingState = SplittingState.WAITING
+    
+    class Config:
+        arbitrary_types_allowed = True

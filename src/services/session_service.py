@@ -1,5 +1,5 @@
-from uuid import UUID
 
+from bson import ObjectId
 from src.models.expense_model import Expense
 from src.models.session_model import Session
 from src.repositories.session_repository import SessionRepository
@@ -9,7 +9,7 @@ class SessionService:
     def __init__(self, session_repository: SessionRepository):
         self.repository = session_repository
 
-    def get_session_by_id(self, session_id: UUID) -> Session | None:
+    def get_session_by_id(self, session_id: ObjectId) -> Session | None:
         session_base_model = self.repository.get_by_id(session_id)
         if session_base_model is None:
             return None
@@ -31,4 +31,7 @@ class SessionService:
             return False
 
         return True
+
+    def add_activity(self, expense):   # TODO : Implement this method
+        pass
 

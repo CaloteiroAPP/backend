@@ -18,7 +18,7 @@ class ExpenseService:
     @staticmethod
     def generate_new_id(expense: Expense) -> Expense:
         expense_base_model = expense.model_dump()
-        expense_base_model["_id"] = uuid4()
+        expense_base_model["id"] = uuid4()
         return Expense(**expense_base_model)
 
     @staticmethod
