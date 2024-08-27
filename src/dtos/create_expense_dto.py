@@ -1,10 +1,14 @@
-
 from typing import List
-from bson import ObjectId
 from pydantic import BaseModel
 
 from src.models.expense_settings_model import ExpenseType, SplittingMethod
-from src.models.splitting_model import Splitting
+from src.models.splitting_settings_model import SplittingSettings
+
+
+class CreateExpenseSplittingDto(BaseModel):
+    amount: float
+    settings: SplittingSettings = SplittingSettings()
+    user: str
 
 
 class CreateExpenseDTO(BaseModel):
@@ -12,12 +16,12 @@ class CreateExpenseDTO(BaseModel):
     currency: str
     description: str = ""
     method: str = SplittingMethod.EQUAL_SPLITTING
-    payer: ObjectId
+    payer: str
     payer_password: str
     photo: str | None = None
-    session: ObjectId | None = None
-    splitting: List[Splitting]
+    session: str | None = None
+    splitting: List[CreateExpenseSplittingDto]
     type: str = ExpenseType.GENERAL
-    
+
     class Config:
         arbitrary_types_allowed = True

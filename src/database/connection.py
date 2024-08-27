@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+from pymongo import ASCENDING
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -13,7 +14,6 @@ MONGO_PASSWORD = os.getenv("MONGO_PASSWORD")
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
 MONGO_DB_PARAMS = os.getenv("MONGO_DB_PARAMS")
 DATABASE_NAME = os.getenv("DATABASE_NAME")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
 # Construct the MongoDB Atlas URI
 MONGO_ATLAS_URI = f"mongodb+srv://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_CLUSTER}/{MONGO_DB_PARAMS}"
@@ -31,6 +31,9 @@ except Exception as e:
 # Access the specified database and collection
 db = client[DATABASE_NAME]
 
+# Configure some database essentials
+db["users"].create_index([("email", ASCENDING)], unique=True)
+db["users"].create_index([("id", ASCENDING)], unique=True)
 
 # Function to ensure the connection and availability of the database and collection
 def ensure_db_and_collection():

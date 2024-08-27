@@ -3,28 +3,36 @@ from src.dtos.create_user_dto import CreateUserDTO
 from src.dtos.create_user_response_dto import CreateUserResponseDTO
 from src.models.expense_model import Expense
 from src.models.expense_settings_model import ExpenseSettings
+from src.models.splitting_model import Splitting
 from src.models.user_model import User
 from src.models.user_settings_model import UserSettings
+from bson import ObjectId
 
 
 class DTOUtils:
 
     @staticmethod
     def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO) -> Expense:
+
         expense_settings = ExpenseSettings(
-            description=create_expense_dto.description,
+            description=" ".join(create_expense_dto.description.split()),
             method=create_expense_dto.method,
             photo=create_expense_dto.photo,
             type=create_expense_dto.type,
         )
+        
+        splitting = [
+            Splitting(amount=splitting.amount, settings=splitting.settings, user=ObjectId(splitting.user))
+            for splitting in create_expense_dto.splitting
+        ]
 
         return Expense(
             amount=create_expense_dto.amount,
             currency=create_expense_dto.currency,
             expense_settings=expense_settings,
-            payer=create_expense_dto.payer,
+            payer=ObjectId(create_expense_dto.payer),
             session=create_expense_dto.session,
-            splitting=create_expense_dto.splitting,
+            splitting=splitting,
         )
 
     @staticmethod
@@ -53,4 +61,26 @@ class DTOUtils:
             last_name=user.last_name,
             password=user.password,
             user_settings=user.user_settings,
+        )
+        
+    @staticmethod
+    def expense_to_create_expense_response_dto(expense: Expense) -> CreateExpenseDTO:
+        
+        expense_settings = ExpenseSettings(
+            description=" ".join(expense.expense_settings.description.split()),
+            method=expense.expense_settings.method,
+            photo=expense.expense_settings.photo,
+            type=expense.expense_settings.type,
+        )
+
+        return CreateExpenseDTO(
+            id=str(expense.id),
+            amount=expense.amount,
+            currency=expense.currency,
+            expense_settings=expense_settings,
+            payer=expense.payer,
+            session=expense.session,
+            splitting=expense.splitting,
+            state=expense.state,
+            timestamp=expense.timestamp,
         )

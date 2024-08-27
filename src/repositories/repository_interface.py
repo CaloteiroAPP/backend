@@ -14,6 +14,9 @@ class RepositoryInterface:
         return self.collection.find_one({"id": resource_id})
 
     def create(self, resource: BaseModel) -> BaseModel:
-        print(resource.model_dump())
         self.collection.insert_one(resource.model_dump())
+        return resource
+    
+    def update(self, resource_id: ObjectId, resource: BaseModel) -> BaseModel:
+        result = self.collection.update_one({"id": resource_id}, {"$set": resource.model_dump()})
         return resource

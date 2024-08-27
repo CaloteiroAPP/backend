@@ -19,6 +19,16 @@ class UserRepository(RepositoryInterface):
     def get_user_by_id(self, user_id: ObjectId) -> dict | None:
         return super().get_by_id(user_id)
     
+    def get_user_by_email(self, email: str) -> dict | None:
+        return self.collection.find_one({"email": email})
+    
     def create_user(self, user: User) -> User:
         user_base_model = super().create(user)
         return User(**user_base_model.model_dump())
+    
+    def update_user(self, user: User) -> User:
+        user_base_model = super().update(user.id, user)
+        return User(**user_base_model.model_dump())
+    
+    def verify_user_friend_code_is_available(self, user: User) -> bool:
+        return self.collection.find_one({"user_settings.friend_code": user.user_settings.friend_code}) is None
