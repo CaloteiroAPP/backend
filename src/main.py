@@ -13,11 +13,11 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
-    title="Splitways API",
+    title="CaloteiroAPP API",
     description=description,
     openapi_tags=tags_metadata,
     version="0.0.1",
-    contact={"name": "Splitways"},
+    contact={"name": "CaloteiroAPP"},
 )
 
 app.add_middleware(
