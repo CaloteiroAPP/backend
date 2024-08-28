@@ -1,4 +1,3 @@
-
 import random
 import string
 from typing import List
@@ -8,8 +7,10 @@ from pydantic import BaseModel
 from src.models.friend_model import Friend
 from src.models.notification_settings_model import NotificationSettings
 
+
 def generate_user_friend_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+
 
 class UserSettings(BaseModel):
     app_access_code: int | None = None
@@ -22,6 +23,6 @@ class UserSettings(BaseModel):
     phone: int | None = None
     photo: str | None = None
     verified: bool = False
-    
+
     class Config:
         arbitrary_types_allowed = True

@@ -32,8 +32,9 @@ except Exception as e:
 db = client[DATABASE_NAME]
 
 # Configure some database essentials
-db["users"].create_index([("email", ASCENDING)], unique=True)
-db["users"].create_index([("id", ASCENDING)], unique=True)
+db["user"].create_index([("id", ASCENDING)], unique=True)
+db["user"].create_index([("email", ASCENDING)], unique=True)
+
 
 # Function to ensure the connection and availability of the database and collection
 def ensure_db_and_collection():

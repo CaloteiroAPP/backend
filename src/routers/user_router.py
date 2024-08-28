@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+from pymongo.errors import DuplicateKeyError
 from pymongo.collection import Collection
 
 from src.database.connection import db
@@ -36,7 +37,12 @@ async def create_user(create_user_dto: CreateUserDTO
     user_service.verify_user_friend_code(user)
 
     # Create new user instance
-    user = user_service.create_user(user)
+    try: 
+        user = user_service.create_user(user)
+    except DuplicateKeyError:
+        return response_handler.bad_request(
+            message="User email already exists",
+        )
 
     # Return the user instance with a success message
     create_user_response_dto = DTOUtils.user_to_create_user_response_dto(user)

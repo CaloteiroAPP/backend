@@ -18,5 +18,5 @@ class RepositoryInterface:
         return resource
     
     def update(self, resource_id: ObjectId, resource: BaseModel) -> BaseModel:
-        result = self.collection.update_one({"id": resource_id}, {"$set": resource.model_dump()})
+        self.collection.update_one({"id": resource_id}, {"$set": resource.model_dump()})
         return resource

@@ -7,7 +7,7 @@ from src.routers.session_router import router as session_router
 from src.routers.user_router import router as user_router
 
 tags_metadata = []
-description = """ """
+description = "CaloteiroAPP API is a simple API to manage expenses and debts between friends."
 
 app = FastAPI(
     openapi_url="/api/openapi.json",

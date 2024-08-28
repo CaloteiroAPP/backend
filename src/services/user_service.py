@@ -92,7 +92,7 @@ class UserService:
             return False, "Friend is muted by the user"
         return True, "Friend request is valid"
     
-    def add_friend_request(self, create_friend_request_dto: CreateFriendRequestDTO) -> User:
+    def add_friend_request(self, create_friend_request_dto: CreateFriendRequestDTO) -> None:
         user = self.get_user_by_email(create_friend_request_dto.user_email)
         friend = self.get_user_by_id(ObjectId(create_friend_request_dto.friend_id))
         
