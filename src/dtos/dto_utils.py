@@ -12,7 +12,7 @@ from bson import ObjectId
 class DTOUtils:
 
     @staticmethod
-    def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO) -> Expense:
+    def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO, payer_id: ObjectId) -> Expense:
 
         expense_settings = ExpenseSettings(
             description=" ".join(create_expense_dto.description.split()),
@@ -30,7 +30,7 @@ class DTOUtils:
             amount=create_expense_dto.amount,
             currency=create_expense_dto.currency,
             expense_settings=expense_settings,
-            payer=ObjectId(create_expense_dto.payer),
+            payer=payer_id,
             session=create_expense_dto.session,
             splitting=splitting,
         )

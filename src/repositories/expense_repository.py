@@ -1,12 +1,29 @@
 
+from functools import wraps
 from bson import ObjectId
 from pymongo.collection import Collection
-
+from pymongo import errors
 from src.models.expense_model import Expense
 from src.repositories.repository_interface import RepositoryInterface
 
 
+def handle_db_error(func):
+    """Decorator to handle MongoDB related errors."""
+
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except errors.PyMongoError:
+            return None
+
+    return wrapper
+
+
 class ExpenseRepository(RepositoryInterface):
+    
+    # SUPERCLASS METHODS IMPLEMENTATION
+    
     def __init__(self, collection: Collection) -> None:
         super().__init__(collection)
 
@@ -24,6 +41,8 @@ class ExpenseRepository(RepositoryInterface):
         if expense_base_model:
             return Expense(**expense_base_model)
         return None
+    
+    # CLASS METHODS
     
     
 

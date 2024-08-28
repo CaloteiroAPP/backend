@@ -8,7 +8,7 @@ from src.models.splitting_settings_model import SplittingSettings
 class CreateExpenseSplittingDto(BaseModel):
     amount: float
     settings: SplittingSettings = SplittingSettings()
-    user: str
+    user_email: str
 
 
 class CreateExpenseDTO(BaseModel):
@@ -16,7 +16,7 @@ class CreateExpenseDTO(BaseModel):
     currency: str
     description: str = ""
     method: str = SplittingMethod.EQUAL_SPLITTING
-    payer: str
+    payer_email: str
     payer_password: str
     photo: str | None = None
     session: str | None = None

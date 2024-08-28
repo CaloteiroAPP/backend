@@ -23,6 +23,7 @@ router = APIRouter()
 @router.post("/user/", response_model=User)
 async def create_user(create_user_dto: CreateUserDTO
                       ) -> JSONResponse:
+    
     # Create the user from the DTO
     user: User = DTOUtils.create_user_dto_to_user(create_user_dto)
 
@@ -55,14 +56,25 @@ async def create_user(create_user_dto: CreateUserDTO
 @router.post("/friend/", response_model=User)
 async def create_friend_request(create_friend_request_dto: CreateFriendRequestDTO
                                 ) -> JSONResponse:
+    
+    # Verify if the payer password is correct
+    if not user_service.verify_user_password(create_friend_request_dto.user_email,
+                                             create_friend_request_dto.user_password):
+        return response_handler.unauthorized(
+            message="Unauthorized access",
+        )
+    
+    # Verify if the friend request is valid
     valid, message = user_service.friend_request_is_valid(create_friend_request_dto)
     if not valid:
         return response_handler.bad_request(
             message=f"Friend request is invalid. {message}",
         )
 
+    # Create new friend request instance
     user_service.add_friend_request(create_friend_request_dto)
     
+    # Return the friend request instance with a success message
     return response_handler.created(
         message="Friend request created",
     )

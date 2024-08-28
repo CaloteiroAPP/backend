@@ -26,8 +26,8 @@ class UserService:
             return None
         return User(**user_base_model)
         
-    def verify_user_password(self, user_id: ObjectId, password: str) -> bool:
-        user = self.get_user_by_id(user_id)
+    def verify_user_password(self, email: str, password: str) -> bool:
+        user = self.get_user_by_email(email)
         if user is None or user.password != password:
             return False
         return True
@@ -76,11 +76,11 @@ class UserService:
         user = self.get_user_by_email(create_friend_request_dto.user_email)
         if user is None:
             return False, "User does not exist"
-        friend = self.get_user_by_id(ObjectId(create_friend_request_dto.friend_id))
+        friend = self.get_user_by_email(create_friend_request_dto.friend_email)
         if friend is None:
             return False, "Friend does not exist"
 
-        if create_friend_request_dto.user_id == create_friend_request_dto.friend_id:
+        if create_friend_request_dto.user_email == create_friend_request_dto.friend_email:
             return False, "Sender and receiver are the same"
         elif any(friend.id == friend_user.user for friend_user in user.user_settings.friend_users):
             return False, "Friend is already a friend"
@@ -94,7 +94,7 @@ class UserService:
     
     def add_friend_request(self, create_friend_request_dto: CreateFriendRequestDTO) -> None:
         user = self.get_user_by_email(create_friend_request_dto.user_email)
-        friend = self.get_user_by_id(ObjectId(create_friend_request_dto.friend_id))
+        friend = self.get_user_by_email(create_friend_request_dto.friend_email)
         
         user.user_settings.friend_requests.append(friend.id)
         friend.user_settings.friend_requests.append(user.id)

@@ -1,9 +1,23 @@
 
+from functools import wraps
 from typing import Collection
-
+from pymongo import errors
 from bson import ObjectId
 from src.models.notification_model import Notification
 from src.repositories.repository_interface import RepositoryInterface
+
+
+def handle_db_error(func):
+    """Decorator to handle MongoDB related errors."""
+
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except errors.PyMongoError:
+            return None
+
+    return wrapper
 
 
 class NotificationRepository(RepositoryInterface):

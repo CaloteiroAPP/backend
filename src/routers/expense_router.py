@@ -33,15 +33,18 @@ router = APIRouter()
 @router.post("/expense/", response_model=Expense)
 async def create_expense(create_expense_dto: CreateExpenseDTO,
                          ) -> JSONResponse:
-    # Create the expense from the DTO
-    expense = DTOUtils.create_expense_dto_to_expense(create_expense_dto)
     
     # Verify if the payer password is correct
-    if not user_service.verify_user_password(expense.payer, create_expense_dto.payer_password):
+    if not user_service.verify_user_password(create_expense_dto.payer_email, create_expense_dto.payer_password):
         return response_handler.unauthorized(
             message="Unauthorized access",
         )
+        
+    payer = user_service.get_user_by_email(create_expense_dto.payer_email)
 
+    # Create the expense from the DTO
+    expense = DTOUtils.create_expense_dto_to_expense(create_expense_dto, payer.id)
+    
     # Verify if the expense is valid
     valid, message = expense_service.expense_is_valid(expense)
     if not valid:
