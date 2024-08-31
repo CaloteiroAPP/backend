@@ -1,12 +1,11 @@
 
-from bson import ObjectId
 from pydantic import BaseModel
 
 from src.models.session_settings_model import SessionType
 
 
 class CreateSessionDTO(BaseModel):
-    creator: ObjectId
+    creator_id: str
     creator_password: str
     name: str
     photo: str

@@ -32,14 +32,19 @@ class RepositoryInterface:
 
     @handle_db_error
     def create(self, resource: BaseModel) -> BaseModel | None:
-        self.collection.insert_one(resource.dict())
+        self.collection.insert_one(resource.model_dump())
         return resource
+    
+    @handle_db_error
+    def create_many(self, resources: list[BaseModel]) -> list[BaseModel] | None:
+        self.collection.insert_many([resource.model_dump() for resource in resources])
+        return resources
 
     @handle_db_error
     def update(self, resource_id: ObjectId, resource: BaseModel) -> BaseModel | None:
         result = self.collection.update_one(
             {"_id": resource_id},
-            {"$set": resource.dict()},
+            {"$set": resource.model_dump()},
             upsert=False
         )
         if result.matched_count == 0:

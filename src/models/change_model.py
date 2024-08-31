@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class Change(BaseModel):
-    str: str
+    change_message: str
     timestamp: float = time.time()
     
     class Config:

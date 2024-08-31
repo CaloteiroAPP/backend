@@ -19,7 +19,7 @@ class Expense(BaseModel):
     amount: float
     currency: str
     expense_settings: ExpenseSettings = ExpenseSettings()
-    payer: ObjectId
+    payer_id: ObjectId
     session: ObjectId | None = None
     splitting: List[Splitting]
     state: str = State.WAITING_PAYMENTS
@@ -28,7 +28,7 @@ class Expense(BaseModel):
     class Config:
         arbitrary_types_allowed = True
     
-    def model_dump_id(self, *args, **kwargs): 
-        expense_dict = super().model_dump(*args, **kwargs)
-        expense_dict['id'] = self.id
-        return expense_dict
+    # def model_dump_id(self, *args, **kwargs):  # TODO: Remove this method
+    #     expense_dict = super().model_dump(*args, **kwargs)
+    #     expense_dict['id'] = self.id
+    #     return expense_dict

@@ -5,6 +5,7 @@ from bson import ObjectId
 
 from src.dtos.create_friend_request import CreateFriendRequestDTO
 from src.models.expense_model import Expense
+from src.models.friend_request_model import FriendRequest
 from src.models.user_model import User
 from src.models.user_settings_model import generate_user_friend_code
 from src.repositories.user_repository import UserRepository
@@ -20,14 +21,14 @@ class UserService:
             return None
         return User(**user_base_model)
     
-    def get_user_by_email(self, email: str) -> User | None:
-        user_base_model = self.repository.get_user_by_email(email)
+    def get_user_by_email(self, user_email: str) -> User | None:
+        user_base_model = self.repository.get_user_by_email(user_email)
         if user_base_model is None:
             return None
         return User(**user_base_model)
         
-    def verify_user_password(self, email: str, password: str) -> bool:
-        user = self.get_user_by_email(email)
+    def verify_user_id_password(self, user_id: str, password: str) -> bool:
+        user = self.get_user_by_id(ObjectId(user_id))
         if user is None or user.password != password:
             return False
         return True
@@ -39,10 +40,10 @@ class UserService:
         return user
     
     def verify_personal_splitting(self, expense: Expense) -> tuple[bool, str]:
-        user = self.get_user_by_id(expense.payer)
+        user = self.get_user_by_id(expense.payer_id)
         if user is None:
             return False, "User does not exist"
-        elif not all([splitting.user in user.user_settings.friend_users for splitting in expense.splitting]):
+        elif not all([splitting.user_id in user.user_settings.friend_users for splitting in expense.splitting]):
             return False, "Not all the associated users in the splitting are friends with this user"
         return True, "All the associated users in the splitting are friends with this user"
 
@@ -72,32 +73,31 @@ class UserService:
         user_base_model["id"] = ObjectId()
         return User(**user_base_model)
     
-    def friend_request_is_valid(self, create_friend_request_dto: CreateFriendRequestDTO) -> tuple[bool, str]:
-        user = self.get_user_by_email(create_friend_request_dto.user_email)
+    def friend_request_is_valid(self, create_friend_request_dto: CreateFriendRequestDTO) -> tuple[bool, str, FriendRequest | None]:
+        user = self.get_user_by_id(ObjectId(create_friend_request_dto.user_id))
         if user is None:
-            return False, "User does not exist"
-        friend = self.get_user_by_email(create_friend_request_dto.friend_email)
+            return False, "User does not exist", None
+        friend = self.get_user_by_id(ObjectId(create_friend_request_dto.friend_id))
         if friend is None:
-            return False, "Friend does not exist"
+            return False, "Friend does not exist", None
 
-        if create_friend_request_dto.user_email == create_friend_request_dto.friend_email:
-            return False, "Sender and receiver are the same"
+        if create_friend_request_dto.user_id == create_friend_request_dto.user_id:
+            return False, "Sender and receiver are the same", None
         elif any(friend.id == friend_user.user for friend_user in user.user_settings.friend_users):
-            return False, "Friend is already a friend"
+            return False, "Friend is already a friend", None
         elif user.id in friend.user_settings.friend_requests:
-            return False, "Friend request already exists"
+            return False, "Friend request already exists", None
         elif user.id in friend.user_settings.muted_users:
-            return False, "User is muted by the friend"
+            return False, "User is muted by the friend", None
         elif friend.id in user.user_settings.muted_users:
-            return False, "Friend is muted by the user"
-        return True, "Friend request is valid"
-    
-    def add_friend_request(self, create_friend_request_dto: CreateFriendRequestDTO) -> None:
-        user = self.get_user_by_email(create_friend_request_dto.user_email)
-        friend = self.get_user_by_email(create_friend_request_dto.friend_email)
+            return False, "Friend is muted by the user", None
         
-        user.user_settings.friend_requests.append(friend.id)
+        return True, "Friend request is valid", FriendRequest(user=user, friend=friend)
+    
+    def add_friend_request(self, friend_request: FriendRequest) -> None:
+        user = friend_request.user
+        friend = friend_request.friend
+        
         friend.user_settings.friend_requests.append(user.id)
         
-        self.repository.update_user(user)
         self.repository.update_user(friend)

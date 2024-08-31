@@ -1,3 +1,4 @@
+from bson import ObjectId
 from src.dtos.create_expense_dto import CreateExpenseDTO
 from src.dtos.create_user_dto import CreateUserDTO
 from src.dtos.create_user_response_dto import CreateUserResponseDTO
@@ -6,13 +7,12 @@ from src.models.expense_settings_model import ExpenseSettings
 from src.models.splitting_model import Splitting
 from src.models.user_model import User
 from src.models.user_settings_model import UserSettings
-from bson import ObjectId
 
 
 class DTOUtils:
 
     @staticmethod
-    def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO, payer_id: ObjectId) -> Expense:
+    def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO) -> Expense:
 
         expense_settings = ExpenseSettings(
             description=" ".join(create_expense_dto.description.split()),
@@ -22,7 +22,7 @@ class DTOUtils:
         )
         
         splitting = [
-            Splitting(amount=splitting.amount, settings=splitting.settings, user=ObjectId(splitting.user))
+            Splitting(amount=splitting.amount, settings=splitting.settings, user_id=ObjectId(splitting.user_id))
             for splitting in create_expense_dto.splitting
         ]
 
@@ -30,7 +30,7 @@ class DTOUtils:
             amount=create_expense_dto.amount,
             currency=create_expense_dto.currency,
             expense_settings=expense_settings,
-            payer=payer_id,
+            payer_id=ObjectId(create_expense_dto.payer_id),
             session=create_expense_dto.session,
             splitting=splitting,
         )
@@ -47,6 +47,7 @@ class DTOUtils:
             email=create_user_dto.email,
             first_name=create_user_dto.first_name,
             last_name=create_user_dto.last_name,
+            full_name=create_user_dto.first_name + " " + create_user_dto.last_name,
             password=create_user_dto.password,
             user_settings=user_settings,
         )

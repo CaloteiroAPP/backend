@@ -1,6 +1,6 @@
 
 from functools import wraps
-from typing import Collection
+from pymongo.collection import Collection
 from pymongo import errors
 from bson import ObjectId
 from src.models.notification_model import Notification
@@ -35,3 +35,8 @@ class NotificationRepository(RepositoryInterface):
     def create_notification(self, notification: Notification) -> Notification:
         notification_base_model = super().create(notification)
         return Notification(**notification_base_model.model_dump())
+    
+    def create_notifications(self, notifications: list[Notification]) -> list[Notification]:
+        notifications_base_model = super().create_many(notifications)
+        return [Notification(**notification_base_model.model_dump()) for notification_base_model in notifications_base_model]
+    

@@ -12,8 +12,8 @@ class User(BaseModel):
     email: str
     first_name: str
     last_name: str
+    full_name: str
     password: str
-    notifications: List[ObjectId] = []
     sessions: List[ObjectId] = []
     user_settings: UserSettings = UserSettings()
     
