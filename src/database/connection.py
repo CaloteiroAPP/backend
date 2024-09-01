@@ -7,7 +7,7 @@ from pymongo.server_api import ServerApi
 
 # Logger configuration
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(name)s - %(message)s')
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
 load_dotenv(".env")
@@ -28,9 +28,9 @@ client = MongoClient(MONGO_ATLAS_URI, server_api=ServerApi('1'))
 # Attempt to ping the MongoDB Atlas cluster to confirm a successful connection
 try:
     client.admin.command('ping')
-    logger.info("Pinged your deployment. You successfully connected to MongoDB Atlas!")
+    _logger.info("Pinged your deployment. You successfully connected to MongoDB Atlas!")
 except Exception as e:
-    logger.error(f"An error occurred: {e}")
+    _logger.error(f"An error occurred: {e}")
 
 # Access the specified database and collection
 db = client[DATABASE_NAME]
@@ -39,11 +39,13 @@ db = client[DATABASE_NAME]
 db["user"].create_index([("id", ASCENDING)], unique=True)
 db["user"].create_index([("email", ASCENDING)], unique=True)
 
+
 # Function to ensure the connection and availability of the database and collection
 def ensure_db_and_collection():
     if client is not None:
-        logger.info("Connected to MongoDB Atlas")
+        _logger.info("Connected to MongoDB Atlas")
     else:
-        logger.warning("Could not connect to MongoDB Atlas")
+        _logger.warning("Could not connect to MongoDB Atlas")
+
 
 ensure_db_and_collection()

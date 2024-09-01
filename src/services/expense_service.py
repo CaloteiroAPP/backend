@@ -1,7 +1,11 @@
+import logging
 from uuid import uuid4
 from src.models.expense_model import Expense
 from src.models.expense_settings_model import SplittingMethod
 from src.repositories.expense_repository import ExpenseRepository
+
+_logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(name)s - %(message)s')
 
 
 class ExpenseService:
@@ -10,21 +14,21 @@ class ExpenseService:
         self.repository = expense_repository
 
     def create_expense(self, expense: Expense) -> Expense:
+        _logger.info(f"Creating expense: {expense.id}")
         while not self.repository.verify_expense_id_is_available(expense):
             expense = self.generate_new_id(expense)
-        
-        created_base_model = self.repository.create_expense(expense)
-        return Expense(** created_base_model.model_dump())
+        return self.repository.create_expense(expense)
 
     @staticmethod
     def generate_new_id(expense: Expense) -> Expense:
+        _logger.info(f"Generating new id for expense: {expense.id}")
         expense_base_model = expense.model_dump()
         expense_base_model["id"] = uuid4()
         return Expense(**expense_base_model)
 
     @staticmethod
     def expense_is_valid(expense: Expense) -> tuple[bool, str]:
-        
+        _logger.info(f"Verifying expense: {expense.id}")
         # Amount is a negative number
         if expense.amount <= 0:
             return False, "Amount is a negative number"
@@ -63,4 +67,5 @@ class ExpenseService:
             if any([splitting.amount != 0 for splitting in expense.splitting if splitting.user_id == expense.payer_id]):
                 return False, "The payer is not the one who is owned all in you pay all"
         
+        _logger.info(f"Expense is valid: {expense.id}")
         return True, "Expense is valid"

@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pymongo.collection import Collection
@@ -39,10 +40,15 @@ router = APIRouter()
 
 _cache_service = CacheService()
 
+_logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(name)s - %(message)s')
+
 
 @router.post("/expense/", response_model=Expense)
 async def create_expense(create_expense_dto: CreateExpenseDTO,
                          ) -> JSONResponse:
+    _logger.info("Initiating expense creation")
+    
     # Verify if the payer password is correct
     cached_valid: bool | None = _cache_service.get_or_set(
         str({"user_service_verify_user_password": (create_expense_dto.payer_id, create_expense_dto.payer_password)}),
@@ -50,8 +56,10 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     )
     # If the cached result (or newly computed one) is False, deny access
     if not cached_valid:
+        message = "Unauthorized access"
+        _logger.error(message)
         return _response_handler.unauthorized(
-            message="Unauthorized access",
+            message=message,
         )
         
     # Create the expense from the DTO
@@ -61,8 +69,10 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     # Verify if the expense is valid
     valid, message = _expense_service.expense_is_valid(expense)
     if not valid:
+        message = f"Expense is invalid. {message}"
+        _logger.error(message)
         return _response_handler.bad_request(
-            message=f"Expense is invalid. {message}",
+            message=message,
         )
 
     # Verify if the user has access inside the session
@@ -76,8 +86,10 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     else:
         valid, message = _user_service.verify_personal_splitting(expense)
         if not valid:
+            message = f"Personal splitting is invalid. {message}"
+            _logger.error(message)
             return _response_handler.bad_request(
-                message=f"Actions are not allowed for this user. {message}",
+                message=message,
             )
 
     # Create new expense instance
@@ -98,8 +110,11 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     _notification_service.create_notifications(notifications_list)
 
     create_expense_response = DTOUtils.expense_to_create_expense_response_dto(expense)
+    
     # Return the expense instance with a success message
+    message = "Expense created"
+    _logger.info(message)
     return _response_handler.created(
         data=create_expense_response.model_dump(),
-        message="Expense created",
+        message=message,
     )

@@ -27,8 +27,4 @@ class Session(BaseModel):
     
     class Config:
         arbitrary_types_allowed = True
-    
-    def model_dump_id(self, *args, **kwargs): 
-        session_dict = super().model_dump(*args, **kwargs)
-        session_dict['id'] = self.id
-        return session_dict
+

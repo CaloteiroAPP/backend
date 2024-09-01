@@ -1,3 +1,4 @@
+import logging
 from bson import ObjectId
 from src.dtos.create_expense_dto import CreateExpenseDTO
 from src.dtos.create_user_dto import CreateUserDTO
@@ -8,11 +9,16 @@ from src.models.splitting_model import Splitting
 from src.models.user_model import User
 from src.models.user_settings_model import UserSettings
 
+_logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(name)s - %(message)s')
+
 
 class DTOUtils:
 
     @staticmethod
     def create_expense_dto_to_expense(create_expense_dto: CreateExpenseDTO) -> Expense:
+
+        _logger.info("Creating Expense from CreateExpenseDTO")
 
         expense_settings = ExpenseSettings(
             description=" ".join(create_expense_dto.description.split()),
@@ -38,6 +44,8 @@ class DTOUtils:
     @staticmethod
     def create_user_dto_to_user(create_user_dto: CreateUserDTO) -> User:
         
+        _logger.info("Creating User from CreateUserDTO")
+        
         user_settings = UserSettings(
             phone=create_user_dto.phone,
             photo=create_user_dto.photo,
@@ -55,6 +63,8 @@ class DTOUtils:
     @classmethod
     def user_to_create_user_response_dto(cls, user: User) -> CreateUserResponseDTO:
         
+        _logger.info("Creating CreateUserResponseDTO from User")
+        
         return CreateUserResponseDTO(
             id=str(user.id),
             email=user.email,
@@ -67,6 +77,8 @@ class DTOUtils:
         
     @staticmethod
     def expense_to_create_expense_response_dto(expense: Expense) -> CreateExpenseDTO:
+        
+        _logger.info("Creating CreateExpenseDTO from expense")
         
         expense_settings = ExpenseSettings(
             description=" ".join(expense.expense_settings.description.split()),

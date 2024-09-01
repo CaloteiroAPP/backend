@@ -52,5 +52,5 @@ class UserRepository(RepositoryInterface):
         return self.collection.find_one({"email": email})
     
     @handle_db_error
-    def verify_user_friend_code_is_available(self, user: User) -> bool | None:
-        return self.collection.find_one({"user_settings.friend_code": user.user_settings.friend_code}) is None
+    def verify_user_friend_code_is_available(self, friend_code: str) -> bool | None:
+        return self.collection.find_one({"user_settings.friend_code": friend_code}) is None
