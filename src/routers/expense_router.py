@@ -58,9 +58,7 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     if not cached_valid:
         message = "Unauthorized access"
         _logger.error(message)
-        return _response_handler.unauthorized(
-            message=message,
-        )
+        return _response_handler.unauthorized(message=message)
         
     # Create the expense from the DTO
     expense = DTOUtils.create_expense_dto_to_expense(create_expense_dto)
@@ -71,26 +69,22 @@ async def create_expense(create_expense_dto: CreateExpenseDTO,
     if not valid:
         message = f"Expense is invalid. {message}"
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
 
     # Verify if the user has access inside the session
     if expense.session is not None:
         valid, message = _session_service.verify_session_splitting(expense)
         if not valid:
-            return _response_handler.bad_request(
-                message=f"Actions are not allowed in this session. {message}",
-            )
+            message = f"Session splitting is invalid. {message}"
+            _logger.error(message)
+            return _response_handler.bad_request(message=message)
     # Verify if all the associated users in the splitting are friends with this user
     else:
         valid, message = _user_service.verify_personal_splitting(expense)
         if not valid:
             message = f"Personal splitting is invalid. {message}"
             _logger.error(message)
-            return _response_handler.bad_request(
-                message=message,
-            )
+            return _response_handler.bad_request(message=message)
 
     # Create new expense instance
     expense = _expense_service.create_expense(expense)

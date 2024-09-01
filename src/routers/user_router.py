@@ -36,9 +36,7 @@ async def create_user(create_user_dto: CreateUserDTO
     if not valid:
         message = f"User is invalid. {message}"
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
 
     # Verify if the user friend code
     _user_service.verify_user_friend_code(user)
@@ -49,9 +47,7 @@ async def create_user(create_user_dto: CreateUserDTO
     except DuplicateKeyError:
         message = "User email already exists"
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
 
     # Return the user instance with a success message
     create_user_response_dto = DTOUtils.user_to_create_user_response_dto(user)
@@ -74,9 +70,7 @@ async def create_friend_request(create_friend_request_dto: CreateFriendRequestDT
                                                  create_friend_request_dto.user_password):
         message = "Unauthorized access"
         _logger.error(message)
-        return _response_handler.unauthorized(
-            message=message,
-        )
+        return _response_handler.unauthorized(message=message)
 
     # Verify if the friend request is valid
     valid, message, friend_request = _user_service.friend_request_is_valid(create_friend_request_dto)
@@ -97,16 +91,12 @@ async def create_friend_request(create_friend_request_dto: CreateFriendRequestDT
     if _user_service.add_friend_request(friend_request) is False:
         message = "Friend request could not be created. Something went wrong."
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
 
     # Return the friend request instance with a success message
     message = "Friend request created"
     _logger.info(message)
-    return _response_handler.created(
-        message=message,
-    )
+    return _response_handler.created(message=message)
 
 
 @router.post("/friend/accept", response_model=User)
@@ -127,27 +117,19 @@ async def accept_friend_request(create_friend_request_dto: CreateFriendRequestDT
     if not valid:
         message = f"Friend request acceptance is invalid. {message}"
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
     elif friend_request is None:
         message = "Friend request acceptance is invalid. Something went wrong."
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
 
     # Create new friend instance
     if _user_service.add_friend(friend_request) is False:
         message = "Friend could not be added. Something went wrong."
         _logger.error(message)
-        return _response_handler.bad_request(
-            message=message,
-        )
+        return _response_handler.bad_request(message=message)
         
     # Return the friend instance with a success message
     message = "Friend added"
     _logger.info(message)
-    return _response_handler.created(
-        message=message,
-    )
+    return _response_handler.created(message=message)
