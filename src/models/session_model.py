@@ -15,7 +15,7 @@ def generate_session_password(length=6):
 
 
 class Session(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
+    id: ObjectId = Field(default_factory=ObjectId)
     activity: List[Change] = []
     creator: ObjectId
     expenses: List[ObjectId] = []

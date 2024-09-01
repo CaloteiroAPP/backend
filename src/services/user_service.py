@@ -136,9 +136,6 @@ class UserService:
 
         user.user_settings.friend_requests.remove(friend.id)
         
-        print(user)
-        print(friend)
-        
         if self.repository.update_user(user) is None or self.repository.update_user(friend) is None:
             return False
         return True

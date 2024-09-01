@@ -8,7 +8,7 @@ from src.models.user_settings_model import UserSettings
 
 
 class User(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
+    id: ObjectId = Field(default_factory=ObjectId)
     email: str
     first_name: str
     last_name: str

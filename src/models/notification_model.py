@@ -21,7 +21,7 @@ class NotificationType(Enum):
 
 
 class Notification(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
+    id: ObjectId = Field(default_factory=ObjectId)
     session: ObjectId = None  # Related to a session
     user_id: ObjectId = None  # Related to a user and/or restricted to a session's user
     data: dict = {}

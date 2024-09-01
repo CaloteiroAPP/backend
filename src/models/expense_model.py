@@ -15,7 +15,7 @@ class State(Enum):
 
 
 class Expense(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias='_id')
+    id: ObjectId = Field(default_factory=ObjectId)
     amount: float
     currency: str
     expense_settings: ExpenseSettings = ExpenseSettings()
