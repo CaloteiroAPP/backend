@@ -20,6 +20,6 @@ class NotificationService:
         if data is None:
             data = {}
         notifications = []
-        for user in users:
-            notifications.append(Notification(user=user, session=session, data=data, type=n_type))
+        for user_id in users:
+            notifications.append(Notification(user_id=user_id, session=session, data=data, type=n_type))
         return notifications

@@ -43,7 +43,7 @@ class RepositoryInterface:
     @handle_db_error
     def update(self, resource_id: ObjectId, resource: BaseModel) -> BaseModel | None:
         result = self.collection.update_one(
-            {"_id": resource_id},
+            {"id": resource_id},
             {"$set": resource.model_dump()},
             upsert=False
         )

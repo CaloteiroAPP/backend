@@ -42,10 +42,10 @@ class ExpenseService:
                   for splitting in expense.splitting]):
             return False, "A splitting is not a valid float number for currency"
         # The payer is not in the splittings
-        elif expense.payer not in [splitting.user for splitting in expense.splitting]:
+        elif expense.payer_id not in [splitting.user_id for splitting in expense.splitting]:
             return False, "The payer is not in the splittings"
         # A splitting user is duplicated
-        elif len(set([splitting.user for splitting in expense.splitting])) != len(expense.splitting):
+        elif len(set([splitting.user_id for splitting in expense.splitting])) != len(expense.splitting):
             return False, "A splitting user is duplicated"
         # The method is not valid
         elif expense.expense_settings.method not in SplittingMethod:
@@ -56,11 +56,11 @@ class ExpenseService:
                 return False, "All the splittings are not equal in equal splitting"
         elif expense.expense_settings.method == SplittingMethod.I_PAY_ALL:
             # The payer is not the one who pays all
-            if any([splitting.amount != 0 for splitting in expense.splitting if splitting.user != expense.payer]):
+            if any([splitting.amount != 0 for splitting in expense.splitting if splitting.user_id != expense.payer_id]):
                 return False, "The payer is not the one who pays all in I pay all"
         elif expense.expense_settings.method == SplittingMethod.YOU_PAY_ALL:
             # The payer is not the one who is owned all
-            if any([splitting.amount != 0 for splitting in expense.splitting if splitting.user == expense.payer]):
+            if any([splitting.amount != 0 for splitting in expense.splitting if splitting.user_id == expense.payer_id]):
                 return False, "The payer is not the one who is owned all in you pay all"
         
         return True, "Expense is valid"

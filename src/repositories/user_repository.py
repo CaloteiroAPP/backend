@@ -39,8 +39,10 @@ class UserRepository(RepositoryInterface):
         user_base_model = super().create(user)
         return User(**user_base_model.model_dump())
     
-    def update_user(self, user: User) -> User:
+    def update_user(self, user: User) -> User | None:
         user_base_model = super().update(user.id, user)
+        if user_base_model is None:
+            return None
         return User(**user_base_model.model_dump())
     
     # CLASS METHODS

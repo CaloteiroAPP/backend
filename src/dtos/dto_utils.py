@@ -60,6 +60,7 @@ class DTOUtils:
             email=user.email,
             first_name=user.first_name,
             last_name=user.last_name,
+            full_name=user.full_name,
             password=user.password,
             user_settings=user.user_settings,
         )
@@ -79,7 +80,7 @@ class DTOUtils:
             amount=expense.amount,
             currency=expense.currency,
             expense_settings=expense_settings,
-            payer=expense.payer,
+            payer=expense.payer_id,
             session=expense.session,
             splitting=expense.splitting,
             state=expense.state,
